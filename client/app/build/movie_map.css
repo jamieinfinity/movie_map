@@ -1,0 +1,28 @@
+body {
+	background-color: #eee;
+	font-family: 'Trirong', georgia, times, serif;
+	font-weight: 200;
+	font-size: 18px;
+}
+
+
+body, a {
+	color: #808080;
+}
+
+.grid {
+    display: grid;
+    grid-column-gap: 5px;
+    grid-row-gap: 7px;
+    grid-template-columns: 180px repeat(15, 90px);
+    grid-template-rows: repeat(90, 45px);
+    /*grid-template-columns: 180px repeat(10, 90px);*/
+    /*grid-template-rows: repeat(100, 15px 45px);*/
+    /*grid-auto-rows: 45px;*/
+}
+
+.char {
+    /*border-radius: 3px;*/
+    padding: 0.5em;
+    background-color: #ccc;
+}

@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.csv
+*.ini
+*.cfg
+**/_Data/*
+**/film_data/*
+!**/_Data/
+!**/_Data/README.md
+!**/film_data/
+!**/film_data/README.md
+*.db
+*.env
+_libs
+*_apptoken
+*.png
+
+# Coverage tools
+lib-cov
+coverage
+coverage.html
+.cover*
+.coveralls.yml
+
+# Dependency directory
+node_modules
+
+# Editor and other tmp files
+*.swp
+*.un~
+*.iml
+*.ipr
+*.iws
+*.sublime-*
+.idea/
+*.DS_Store
+.ipynb_checkpoints
+*.pyc
+__pycache__*
+

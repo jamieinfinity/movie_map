@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>wMovie Map</title>
+    <script type="text/javascript" src="./build/movie_map.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <link href="build/movie_map.css" rel="stylesheet" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Trirong:100,200" rel="stylesheet">
+</head>
+
+<body translate="no">
+<div id="rootdiv"></div>
+</body>
+
+<script type="text/javascript">
+
+//    worldline_wgt.buildApp("#rootdiv");
+
+
+//Load in character data
+d3.json("./film_data/shots.json", function(data) {
+  grid = d3.select("#rootdiv")
+    .append("div")
+    .attr("id", "grid")
+    .attr("class", "grid");
+  chars = grid
+    .selectAll("div")
+    .data(data)
+    // .data(data.slice(0,1000))
+    .enter()
+    .append("div")
+    .attr("class", "char");
+  chars.style("background-image", function(d){
+      return 'url("./film_data/shot_images/shotImageSM_' + (d.frames[0]) + '.jpeg")';
+  });
+
+})
+
+
+</script>
+
+</html>
