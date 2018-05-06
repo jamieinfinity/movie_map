@@ -1,5 +1,5 @@
 body {
-	background-color: #eee;
+	background-color: #eaeaea;
 	font-family: 'Trirong', georgia, times, serif;
 	font-weight: 200;
 	font-size: 18px;
@@ -13,16 +13,18 @@ body, a {
 .grid {
     display: grid;
     grid-column-gap: 5px;
-    grid-row-gap: 7px;
-    grid-template-columns: 180px repeat(15, 90px);
-    grid-template-rows: repeat(90, 45px);
-    /*grid-template-columns: 180px repeat(10, 90px);*/
-    /*grid-template-rows: repeat(100, 15px 45px);*/
-    /*grid-auto-rows: 45px;*/
+    grid-row-gap: 5px;
 }
 
-.char {
+.cell {
     /*border-radius: 3px;*/
     padding: 0.5em;
-    background-color: #ccc;
+    background-color: #d9d9d9;
+}
+
+.cell.scene {
+    background-color: white;
+}
+.cell.act {
+    background-color: white;
 }
