@@ -1,8 +1,8 @@
 body {
 	background-color: #eaeaea;
-	font-family: 'Trirong', georgia, times, serif;
+	font-family: 'Avenir', 'Arial', sans-serif;
 	font-weight: 200;
-	font-size: 18px;
+	font-size: 12px;
 }
 
 
@@ -18,7 +18,7 @@ body, a {
 
 .cell {
     /*border-radius: 3px;*/
-    padding: 0.5em;
+    /*padding: 0.5em;*/
     background-color: #d9d9d9;
 }
 
@@ -26,5 +26,29 @@ body, a {
     background-color: white;
 }
 .cell.act {
-    background-color: white;
+    background-color: #888;
+}
+
+table.movie_table {
+    font-size: 8px;
+    width: 100%;
+    height: 100%;
+    border-collapse: collapse;
+}
+
+tr.tr_data {
+    height: 40%;
+}
+
+tr.tr_title {
+    border-top: 1px solid #ccc;
+}
+
+td.td_title {
+    padding-left: 5px;
+}
+
+td.td_data {
+    padding-left: 5px;
+    padding-right: 5px;
 }
