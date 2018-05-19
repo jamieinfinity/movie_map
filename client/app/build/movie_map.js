@@ -1450,16 +1450,16 @@ function groupByScene(prev, cur) {
     return result;
 }
 
-function makeTabRowData(d) {
-    return '<tr style="color:#fff" class="tr_data">' +
+function makeTabRowData(d, color) {
+    return '<tr style="color:' + color + '" class="tr_data">' +
         '<td class="td_data"' + '><b>' + d.number + '</b></td>' +
         '<td class="td_data"' + '>' + '0:00' + '</td>' +
         '<td class="td_data" align="right"' + '>' + '20 mins' + '</td>' +
         '</tr>';
 }
 
-function makeTabRowTitle(title) {
-    return '<tr style="color:#fff" class="tr_title">' +
+function makeTabRowTitle(title, color) {
+    return '<tr style="color:' + color + '" class="tr_title">' +
         '<td colspan="4" class="td_title"' + '>' + title + '</td>' +
         '</tr>';
 }
@@ -1544,8 +1544,18 @@ function buildApp(domElementID) {
                         '<table class="movie_table">' +
                         '<col width="7%">' +
                         '<col width="60%">' +
-                            makeTabRowData(d) +
-                            makeTabRowTitle(d.title) +
+                            makeTabRowData(d, "#fff") +
+                            makeTabRowTitle(d.title, "#fff") +
+                        '</table>')
+                    );
+
+                grid.selectAll("div.scene")
+                    .html(d => (
+                        '<table class="movie_table">' +
+                        '<col width="7%">' +
+                        '<col width="60%">' +
+                            makeTabRowData(d, "#777") +
+                            makeTabRowTitle(d.title, "#777") +
                         '</table>')
                     );
 
