@@ -1466,20 +1466,20 @@ function makeTabRowTitle(title, color) {
 
 function buildApp(domElementID) {
 
-    let actTitles = {}, actNumbers = {}, sceneTitles = {}, sceneNumbers = {}, shotGrid = [], groupedShots,
-        numActs, numScenes, maxNumShots, prevAct, actAdjustment;
+    let actTitles = {}, actNumbers = {}, sceneTitles = {}, sceneNumbers = {}, tableData = [], groupedShots,
+        numScenes, maxNumShots, prevAct, rowIndex, selectedRow = -1;
 
     tsv$1('./film_data/acts.tsv', function (error, dataActs) {
         dataActs.forEach(function (d, i) {
             actTitles[d.act] = d.title;
-            actNumbers[d.act] = romanNums[i+1];
+            actNumbers[d.act] = romanNums[i + 1];
         });
-        numActs = Object.keys(actTitles).length;
+        // numActs = Object.keys(actTitles).length;
 
         tsv$1('./film_data/scenes.tsv', function (error, dataScenes) {
             dataScenes.forEach(function (d, i) {
                 sceneTitles[d.scene] = d.title;
-                sceneNumbers[d.scene] = i+1;
+                sceneNumbers[d.scene] = i + 1;
             });
             numScenes = Object.keys(sceneTitles).length;
 
@@ -1495,67 +1495,106 @@ function buildApp(domElementID) {
                     return Number(d.length);
                 }));
 
-                for (let i = 0; i < (numActs + numScenes) * (maxNumShots + 1); i++) {
-                    shotGrid.push({
-                        "class": "blank"
-                    });
-                }
-
                 prevAct = "";
-                actAdjustment = 0;
+                rowIndex = 0;
                 for (let i = 0; i < numScenes; i++) {
                     let shots = groupedShots[i],
                         shotInfo = shots[0],
+                        sceneRow = [],
                         shotCell;
                     if (shotInfo.act !== prevAct) {
                         prevAct = shotInfo.act;
-                        shotCell = shotGrid[(i + actAdjustment) * (maxNumShots + 1)];
+                        let actRow = [];
+                        for (let i = 0; i < (2 * maxNumShots + 1); i++) {
+                            actRow.push({
+                                "class": "blank",
+                                "imageId": ""
+                            });
+                        }
+                        tableData.push(actRow);
+                        shotCell = tableData[rowIndex][0];
                         shotCell["class"] = "act";
                         shotCell["title"] = actTitles[shotInfo.act];
                         shotCell["number"] = actNumbers[shotInfo.act];
-                        actAdjustment += 1;
+                        shotCell["row"] = rowIndex;
+                        rowIndex += 1;
                     }
-                    shotCell = shotGrid[(i + actAdjustment) * (maxNumShots + 1)];
-                    shotCell["class"] = "scene";
+                    shotCell = {"class": "scene", "imageId": ""};
                     shotCell["title"] = sceneTitles[shotInfo.scene];
                     shotCell["number"] = sceneNumbers[shotInfo.scene];
+                    shotCell["row"] = rowIndex;
+                    sceneRow.push(shotCell);
                     for (let j = 0; j < shots.length; j++) {
                         shotInfo = shots[j];
-                        shotCell = shotGrid[(i + actAdjustment) * (maxNumShots + 1) + j + 1];
-                        shotCell["class"] = "shot";
+                        shotCell = {"class": "shot"};
                         shotCell["imageId"] = shotInfo.frames[0];
+                        shotCell["row"] = rowIndex;
+                        sceneRow.push(shotCell);
                     }
+                    tableData.push(sceneRow);
+                    rowIndex += 1;
                 }
 
-                let grid = select(domElementID).append("div").attr("id", "grid").attr("class", "grid"),
-                    cells = grid.selectAll("div").data(shotGrid).enter().append("div").attr("class", function (d) {
-                        return "cell " + d.class;
+                let table = select(domElementID).append("table").attr("class", "movie_table").style("width", (2 * maxNumShots * (90 + 1) + 225) + "px"),
+                    rows = table.selectAll("tr").data(tableData).enter().append("tr").attr("class", "movie_row"),
+                    cells = rows.selectAll("td").data(function (row) {
+                        return row;
+                    }).enter().append("td").attr("class", function (d) {
+                        return "movie_cell " + d.class;
                     });
 
-                grid.style("grid-template-columns", "270px repeat(" + maxNumShots + ", 90px)")
-                    .style("grid-template-rows", "repeat(" + (numActs + numScenes) + ", 45px)");
-
                 cells.style("background-image", function (d) {
-                    return (d.class === "shot") ? 'url("./film_data/shot_images/shotImageSM_' + (d.imageId) + '.jpeg")' : '';
+                    if (d.imageId === "") {
+                        return "";
+                    }
+                    return d.row === 10 ?
+                        'url("./film_data/shot_images/shotImageMED_' + (d.imageId) + '.jpeg")' :
+                        'url("./film_data/shot_images/shotImageSM_' + (d.imageId) + '.jpeg")';
+                }).style("width", function (d) {
+                    if (d.class === "act" || d.class === "scene") {
+                        return "225px";
+                    }
+                    return d.row === selectedRow ? "181px" : "90px";
+                }).style("height", function (d) {
+                    return d.row === selectedRow ? "180px" : "45px";
+                }).style("background-size", function (d) {
+                    return d.row === selectedRow ? "181px 90px" : "90px 45px";
+                }).attr("colspan", function (d) {
+                    if (d.class === "act" || d.class === "scene") {
+                        return "1";
+                    }
+                    return d.row === selectedRow ? "2" : "1";
                 });
 
-                grid.selectAll("div.act")
+                // let grid = select(domElementID).append("div").attr("id", "grid").attr("class", "grid"),
+                //     cells = grid.selectAll("div").data(shotGrid).enter().append("div").attr("class", function (d) {
+                //         return "cell " + d.class;
+                //     });
+                //
+                // grid.style("grid-template-columns", "270px repeat(" + maxNumShots + ", 90px)")
+                //     .style("grid-template-rows", "repeat(" + (numActs + numScenes) + ", 45px)");
+                //
+                // cells.style("background-image", function (d) {
+                //     return (d.class === "shot") ? 'url("./film_data/shot_images/shotImageSM_' + (d.imageId) + '.jpeg")' : '';
+                // });
+                //
+                table.selectAll("td.act")
                     .html(d => (
-                        '<table class="movie_table">' +
+                        '<table class="table_data">' +
                         '<col width="7%">' +
                         '<col width="60%">' +
-                            makeTabRowData(d, "#fff") +
-                            makeTabRowTitle(d.title, "#fff") +
+                        makeTabRowData(d, "#fff") +
+                        makeTabRowTitle(d.title, "#fff") +
                         '</table>')
                     );
 
-                grid.selectAll("div.scene")
+                table.selectAll("td.scene")
                     .html(d => (
-                        '<table class="movie_table">' +
+                        '<table class="table_data">' +
                         '<col width="7%">' +
                         '<col width="60%">' +
-                            makeTabRowData(d, "#777") +
-                            makeTabRowTitle(d.title, "#777") +
+                        makeTabRowData(d, "#777") +
+                        makeTabRowTitle(d.title, "#777") +
                         '</table>')
                     );
 
