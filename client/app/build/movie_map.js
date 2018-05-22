@@ -1454,7 +1454,8 @@ function makeTabRowData(d, color) {
     return '<tr style="color:' + color + '" class="tr_data">' +
         '<td class="td_data"' + '><b>' + d.number + '</b></td>' +
         '<td class="td_data"' + '>' + '0:00' + '</td>' +
-        '<td class="td_data" align="right"' + '>' + '20 mins' + '</td>' +
+        '<td class="td_data" align="left"' + '>' + '20 mins' + '</td>' +
+        '<td class="td_data_button" align="center"' + '>' + '+' + '</td>' +
         '</tr>';
 }
 
@@ -1535,12 +1536,13 @@ function buildApp(domElementID) {
                     rowIndex += 1;
                 }
 
-                let table = select(domElementID).append("table").attr("class", "movie_table").style("width", (2 * maxNumShots * (90 + 1) + 225) + "px"),
+                let table = select(domElementID).append("table").attr("class", "movie_table")
+                        .style("width", (2 * maxNumShots * (90 + 1) + 225) + "px"),
                     rows = table.selectAll("tr").data(tableData).enter().append("tr").attr("class", "movie_row"),
                     cells = rows.selectAll("td").data(function (row) {
                         return row;
                     }).enter().append("td").attr("class", function (d) {
-                        return "movie_cell " + d.class;
+                        return "movie_cell " + d.class + " row_" + d.row;
                     });
 
                 cells.style("background-image", function (d) {
@@ -1566,23 +1568,13 @@ function buildApp(domElementID) {
                     return d.row === selectedRow ? "2" : "1";
                 });
 
-                // let grid = select(domElementID).append("div").attr("id", "grid").attr("class", "grid"),
-                //     cells = grid.selectAll("div").data(shotGrid).enter().append("div").attr("class", function (d) {
-                //         return "cell " + d.class;
-                //     });
-                //
-                // grid.style("grid-template-columns", "270px repeat(" + maxNumShots + ", 90px)")
-                //     .style("grid-template-rows", "repeat(" + (numActs + numScenes) + ", 45px)");
-                //
-                // cells.style("background-image", function (d) {
-                //     return (d.class === "shot") ? 'url("./film_data/shot_images/shotImageSM_' + (d.imageId) + '.jpeg")' : '';
-                // });
-                //
                 table.selectAll("td.act")
                     .html(d => (
                         '<table class="table_data">' +
                         '<col width="7%">' +
-                        '<col width="60%">' +
+                        '<col width="65%">' +
+                        '<col width="20%">' +
+                        '<col width="8%">' +
                         makeTabRowData(d, "#fff") +
                         makeTabRowTitle(d.title, "#fff") +
                         '</table>')
@@ -1592,11 +1584,35 @@ function buildApp(domElementID) {
                     .html(d => (
                         '<table class="table_data">' +
                         '<col width="7%">' +
-                        '<col width="60%">' +
+                        '<col width="65%">' +
+                        '<col width="20%">' +
+                        '<col width="8%">' +
                         makeTabRowData(d, "#777") +
                         makeTabRowTitle(d.title, "#777") +
                         '</table>')
-                    );
+                    )
+                    .on("click", function(sceneData) {
+                        // this is pretty ugly, a violation of model/view separation by
+                        // having state info stored in html element, but it works :o
+                        let sceneCell = table.selectAll("td.scene.row_"+sceneData.row),
+                            rowState = sceneCell.select("td.td_data_button").text(),
+                            newState = (rowState==="+") ? "-" : "+",
+                            h = (rowState==="+") ? "90px" : "45px",
+                            w = (rowState==="+") ? "181px" : "90px",
+                            cs = (rowState==="+") ? "2" : "1",
+                            im = (rowState==="+") ? "MED" : "SM";
+
+                        sceneCell.style("height", h);
+                        table.selectAll("td.shot.row_"+sceneData.row)
+                            .style("height", h)
+                            .style("width", w)
+                            .attr("colspan", cs)
+                            .style("background-size", w + " " + h)
+                            .style("background-image", function(d) {
+                                return 'url("./film_data/shot_images/shotImage' + im + '_' + (d.imageId) + '.jpeg")';
+                            });
+                        sceneCell.select("td.td_data_button").text(newState);
+                    });
 
             });
 

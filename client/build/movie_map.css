@@ -19,7 +19,7 @@ body {
     padding: 0px;
 }
 .movie_cell.act {
-    background-color: #888;
+    background-color: #aaa;
 }
 .movie_cell.scene {
     background-color: white;
@@ -36,7 +36,7 @@ table.table_data {
 }
 
 tr.tr_data {
-    height: 40%;
+    height: 18px;
 }
 
 tr.tr_title {
@@ -50,4 +50,12 @@ td.td_title {
 td.td_data {
     padding-left: 5px;
     padding-right: 5px;
+}
+
+td.td_data_button {
+    background-color: #999;
+    color: white;
+    font-weight: bold;
+    font-size: 10px;
+    cursor: pointer;
 }
