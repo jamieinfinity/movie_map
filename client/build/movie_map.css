@@ -15,7 +15,6 @@ body {
 /*}*/
 
 .movie_cell {
-    background-repeat: no-repeat;
     padding: 0px;
 }
 .movie_cell.act {
@@ -26,6 +25,16 @@ body {
 }
 .movie_cell.shot {
     background-color: white;
+}
+
+div.shot_image {
+    background-repeat: no-repeat;
+}
+
+div.shot_dialog {
+    background-color: #222;
+    font-size: 7px;
+    color: white;
 }
 
 table.table_data {

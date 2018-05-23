@@ -1468,7 +1468,7 @@ function makeTabRowTitle(title, color) {
 function buildApp(domElementID) {
 
     let actTitles = {}, actNumbers = {}, sceneTitles = {}, sceneNumbers = {}, tableData = [], groupedShots,
-        numScenes, maxNumShots, prevAct, rowIndex, selectedRow = -1;
+        numScenes, maxNumShots, prevAct, rowIndex;
 
     tsv$1('./film_data/acts.tsv', function (error, dataActs) {
         dataActs.forEach(function (d, i) {
@@ -1530,6 +1530,7 @@ function buildApp(domElementID) {
                         shotCell = {"class": "shot"};
                         shotCell["imageId"] = shotInfo.frames[0];
                         shotCell["row"] = rowIndex;
+                        shotCell["dialog"] = shotInfo.dialog;
                         sceneRow.push(shotCell);
                     }
                     tableData.push(sceneRow);
@@ -1545,28 +1546,30 @@ function buildApp(domElementID) {
                         return "movie_cell " + d.class + " row_" + d.row;
                     });
 
-                cells.style("background-image", function (d) {
-                    if (d.imageId === "") {
-                        return "";
-                    }
-                    return d.row === 10 ?
-                        'url("./film_data/shot_images/shotImageMED_' + (d.imageId) + '.jpeg")' :
-                        'url("./film_data/shot_images/shotImageSM_' + (d.imageId) + '.jpeg")';
-                }).style("width", function (d) {
-                    if (d.class === "act" || d.class === "scene") {
-                        return "225px";
-                    }
-                    return d.row === selectedRow ? "181px" : "90px";
-                }).style("height", function (d) {
-                    return d.row === selectedRow ? "180px" : "45px";
-                }).style("background-size", function (d) {
-                    return d.row === selectedRow ? "181px 90px" : "90px 45px";
-                }).attr("colspan", function (d) {
-                    if (d.class === "act" || d.class === "scene") {
+                cells
+                    .style("width", function (d) {
+                        if (d.class === "act" || d.class === "scene") {
+                            return "225px";
+                        }
+                        return "90px";
+                    })
+                    .style("height", "45px")
+                    .attr("colspan", function (d) {
+                        if (d.class === "act" || d.class === "scene") {
+                            return "1";
+                        }
                         return "1";
-                    }
-                    return d.row === selectedRow ? "2" : "1";
-                });
+                    });
+
+                table.selectAll("td.shot").append("div").attr("class", "shot_image")
+                    .style("width", "90px")
+                    .style("height", "45px")
+                    .style("background-image", function (d) {
+                        return 'url("./film_data/shot_images/shotImageSM_' + (d.imageId) + '.jpeg")';
+                    })
+                    .style("background-size", "90px 45px");
+
+                table.selectAll("td.shot").append("div").attr("class", "shot_dialog");
 
                 table.selectAll("td.act")
                     .html(d => (
@@ -1591,26 +1594,44 @@ function buildApp(domElementID) {
                         makeTabRowTitle(d.title, "#777") +
                         '</table>')
                     )
-                    .on("click", function(sceneData) {
+                    .on("click", function (sceneData) {
                         // this is pretty ugly, a violation of model/view separation by
                         // having state info stored in html element, but it works :o
-                        let sceneCell = table.selectAll("td.scene.row_"+sceneData.row),
+                        let sceneCell = table.selectAll("td.scene.row_" + sceneData.row),
                             rowState = sceneCell.select("td.td_data_button").text(),
-                            newState = (rowState==="+") ? "-" : "+",
-                            h = (rowState==="+") ? "90px" : "45px",
-                            w = (rowState==="+") ? "181px" : "90px",
-                            cs = (rowState==="+") ? "2" : "1",
-                            im = (rowState==="+") ? "MED" : "SM";
+                            newState = (rowState === "+") ? "-" : "+",
+                            hCell = (rowState === "+") ? "200px" : "45px",
+                            hImage = (rowState === "+") ? "90px" : "45px",
+                            hDialog = (rowState === "+") ? "110px" : "0",
+                            w = (rowState === "+") ? "181px" : "90px",
+                            cs = (rowState === "+") ? "2" : "1",
+                            im = (rowState === "+") ? "MED" : "SM",
+                            p = (rowState === "+") ? "3px" : "0px";
 
-                        sceneCell.style("height", h);
-                        table.selectAll("td.shot.row_"+sceneData.row)
-                            .style("height", h)
+                        sceneCell.style("height", hCell);
+                        table.selectAll("td.shot.row_" + sceneData.row)
                             .style("width", w)
-                            .attr("colspan", cs)
-                            .style("background-size", w + " " + h)
-                            .style("background-image", function(d) {
+                            .style("height", hCell)
+                            .attr("colspan", cs);
+
+                        table.selectAll("td.shot.row_" + sceneData.row + " div.shot_image")
+                            .style("width", w)
+                            .style("height", hImage)
+                            .style("background-size", w + " " + hImage)
+                            .style("background-image", function (d) {
                                 return 'url("./film_data/shot_images/shotImage' + im + '_' + (d.imageId) + '.jpeg")';
                             });
+
+                        table.selectAll("td.shot.row_" + sceneData.row + " div.shot_dialog")
+                            .style("width", w)
+                            .style("height", hDialog)
+                            .style("padding-top", p)
+                            .style("padding-bottom", p)
+                            .style("text-align", "center")
+                            .html(function(d) {
+                                return rowState === "+" ? d.dialog.join('<br/>') : "";
+                            });
+
                         sceneCell.select("td.td_data_button").text(newState);
                     });
 
