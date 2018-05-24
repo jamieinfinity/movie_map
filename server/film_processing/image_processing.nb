@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[   4009927,      66985]
-NotebookOptionsPosition[   3996205,      66755]
-NotebookOutlinePosition[   3996564,      66771]
-CellTagsIndexPosition[   3996521,      66768]
+NotebookDataLength[   4029522,      67497]
+NotebookOptionsPosition[   4013253,      67228]
+NotebookOutlinePosition[   4013612,      67244]
+CellTagsIndexPosition[   4013569,      67241]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -66750,10 +66750,483 @@ Cell[BoxData["157"], "Output",
 14dc25a1ca42"]
 }, Open  ]]
 }, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Post-processing of timing data", "Section",
+ CellChangeTimes->{{3.7361169462710943`*^9, 
+  3.7361169574038*^9}},ExpressionUUID->"e7b76621-7bad-43a3-9d30-0483b51592d3"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"formatSeconds", "[", "timeSeconds_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"t", ",", "min", ",", "sec"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"t", "=", 
+       RowBox[{"Round", "[", "timeSeconds", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"min", "=", 
+       RowBox[{
+        RowBox[{"t", "/", "60"}], "//", "Floor"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"sec", "=", 
+       RowBox[{"Round", "@", 
+        RowBox[{"Mod", "[", 
+         RowBox[{"t", ",", "60"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"ToString", "[", "min", "]"}], "~~", "\"\<m \>\"", "~~", 
+       RowBox[{"ToString", "[", "sec", "]"}], "~~", "\"\<s\>\""}]}]}], 
+    "\[IndentingNewLine]", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"formatSeconds2", "[", "timeSeconds_", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"t", ",", "min", ",", "sec"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"t", "=", 
+       RowBox[{"Round", "[", "timeSeconds", "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"min", "=", 
+       RowBox[{
+        RowBox[{"t", "/", "60"}], "//", "Floor"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"sec", "=", 
+       RowBox[{"Round", "@", 
+        RowBox[{"Mod", "[", 
+         RowBox[{"t", ",", "60"}], "]"}]}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"StringPadLeft", "[", 
+        RowBox[{
+         RowBox[{"ToString", "[", "min", "]"}], ",", "2", ",", "\"\<0\>\""}], 
+        "]"}], "~~", "\"\<:\>\"", "~~", 
+       RowBox[{"StringPadLeft", "[", 
+        RowBox[{
+         RowBox[{"ToString", "[", "sec", "]"}], ",", "2", ",", "\"\<0\>\""}], 
+        "]"}]}]}]}], "\[IndentingNewLine]", "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.736119518060911*^9, 3.736119575280539*^9}, {
+  3.7361197279223337`*^9, 3.736119790212435*^9}, {3.736120347001478*^9, 
+  3.736120381630698*^9}, {3.736120762257577*^9, 3.736120777758954*^9}, {
+  3.736120901679421*^9, 
+  3.7361209604371767`*^9}},ExpressionUUID->"a3ecc7f2-5bd9-49a5-9935-\
+3ea493fd88cc"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"acts", " ", "=", 
+   RowBox[{"Rule", "@@@", 
+    RowBox[{"(", " ", 
+     RowBox[{"Rest", "@", 
+      RowBox[{
+      "Import", "[", 
+       "\"\</Users/jamieinfinity/Projects/StoryTelling/Moon/movie_map/client/\
+app/film_data/acts.tsv\>\"", "]"}]}], ")"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"scenes", " ", "=", " ", 
+   RowBox[{"Rule", "@@@", 
+    RowBox[{"(", 
+     RowBox[{"Rest", "@", 
+      RowBox[{
+      "Import", "[", 
+       "\"\</Users/jamieinfinity/Projects/StoryTelling/Moon/movie_map/client/\
+app/film_data/scenes.tsv\>\"", "]"}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"shots", "=", 
+   RowBox[{
+   "Import", "[", 
+    "\"\</Users/jamieinfinity/Projects/StoryTelling/Moon/movie_map/client/app/\
+film_data/shots.json\>\"", "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.736117367930822*^9, 3.736117421988305*^9}, {
+  3.7361190266569138`*^9, 
+  3.736119065167673*^9}},ExpressionUUID->"fafa4239-41ae-4e0a-9c83-\
+1117dda3dab5"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"actData0", " ", "=", " ", 
+   RowBox[{"GatherBy", "[", 
+    RowBox[{"shots", ",", 
+     RowBox[{
+      RowBox[{"\"\<act\>\"", "/.", "#"}], "&"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.736117345551429*^9, 3.7361173513024893`*^9}, {
+   3.736117473976362*^9, 3.73611752890902*^9}, {3.736118879890314*^9, 
+   3.7361188814297533`*^9}, 
+   3.736119207176463*^9},ExpressionUUID->"c1a7dfba-2f3e-44b1-805e-\
+c7da88e339e2"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"actData1", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\"\<id\>\"", "\[Rule]", 
+        RowBox[{"(", 
+         RowBox[{"\"\<act\>\"", "/.", 
+          RowBox[{"#", "[", 
+           RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", 
+       RowBox[{"\"\<title\>\"", "\[Rule]", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"\"\<act\>\"", "/.", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "1", "]"}], "]"}]}], ")"}], "/.", "acts"}], ")"}]}],
+        ",", " ", 
+       RowBox[{"\"\<duration_seconds\>\"", "\[Rule]", 
+        RowBox[{"Total", "[", 
+         RowBox[{"\"\<duration\>\"", "/.", "#"}], "]"}]}], ",", 
+       RowBox[{"\"\<duration_formatted\>\"", "\[Rule]", 
+        RowBox[{"formatSeconds", "[", 
+         RowBox[{"Total", "[", 
+          RowBox[{"\"\<duration\>\"", "/.", "#"}], "]"}], "]"}]}]}], "}"}], 
+     ")"}], "&"}], "/@", "actData0"}]}]], "Input",
+ CellChangeTimes->{{3.736117530718213*^9, 3.736117605595709*^9}, {
+   3.736118892603333*^9, 3.736118975705612*^9}, {3.7361190925726233`*^9, 
+   3.736119110346818*^9}, 3.736119210619294*^9, {3.736119849861559*^9, 
+   3.736119873789915*^9}, {3.7361199347560587`*^9, 
+   3.736119936825659*^9}},ExpressionUUID->"44847cac-34d4-4343-b86c-\
+f030ad38bd32"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_1\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", 
+      "\[Rule]", "\<\"Sam 1's work stint is nearly complete.\"\>"}], ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "1059.25754`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"17m 39s\"\>"}]}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_2\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", "\[Rule]", "\<\"Sam 2's mission begins.\"\>"}], 
+     ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "654.50063`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"10m 55s\"\>"}]}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_3\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", 
+      "\[Rule]", "\<\"The threat of the other Sam.\"\>"}], ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "1395.11977`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"23m 15s\"\>"}]}], 
+    "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_4\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", 
+      "\[Rule]", "\<\"The Sam's join forces against a common threat.\"\>"}], 
+     ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "2462.98895`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"41m 3s\"\>"}]}], 
+    "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{{3.736117532883952*^9, 3.73611760603899*^9}, {
+   3.736118895715222*^9, 3.736118916862597*^9}, {3.736118963980976*^9, 
+   3.7361189765571117`*^9}, 3.736119111416174*^9, 3.736119213801248*^9, 
+   3.736119874983779*^9, 3.736119939570323*^9, 
+   3.736120392729772*^9},ExpressionUUID->"d519e759-0254-4114-bd49-\
+7b09046ff955"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ad1", "=", 
+  RowBox[{"Join", "[", 
+   RowBox[{
+    RowBox[{"{", "0", "}"}], ",", 
+    RowBox[{"\"\<duration_seconds\>\"", "/.", 
+     RowBox[{"Most", "@", "actData1"}]}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.73611995702606*^9, 
+  3.7361200514060373`*^9}},ExpressionUUID->"5fae8ac7-f8d1-4bf0-b2b0-\
+18916420d6a3"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"0", ",", "1059.25754`", ",", "654.50063`", ",", "1395.11977`"}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.7361199652298717`*^9, 3.7361200527645273`*^9}, 
+   3.736120394152894*^9},ExpressionUUID->"b9f50fae-970e-4f93-b0b4-\
+39e3d80006c0"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ad2", "=", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"\"\<start_seconds\>\"", "\[Rule]", "#"}], ",", 
+      RowBox[{"\"\<start_formatted\>\"", "\[Rule]", 
+       RowBox[{"formatSeconds2", "[", "#", "]"}]}]}], "}"}], "&"}], "/@", 
+   RowBox[{"Accumulate", "[", "ad1", "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.73612007339638*^9, 3.736120140901882*^9}, 
+   3.736120387402665*^9},ExpressionUUID->"e646b2e9-d019-4ef7-9863-\
+b2431ae13098"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "0"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"0:0\"\>"}]}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "1059.25754`"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"17:39\"\>"}]}], "}"}],
+    ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "1713.75817`"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"28:34\"\>"}]}], "}"}],
+    ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "3108.8779400000003`"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"51:49\"\>"}]}], 
+    "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.736120077208418*^9, {3.736120124919962*^9, 3.7361201419034233`*^9}, 
+   3.73612039573437*^9},ExpressionUUID->"a93f74d4-0ac1-4e38-a53b-\
+79d6d2c758e9"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"actDataFinal", "=", 
+  RowBox[{"Join", "@@@", 
+   RowBox[{"Transpose", "[", 
+    RowBox[{"{", 
+     RowBox[{"actData1", ",", "ad2"}], "}"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.736120165242358*^9, 3.736120178319891*^9}, {
+  3.736120209404439*^9, 
+  3.736120212563553*^9}},ExpressionUUID->"e6bf55b0-02cf-4436-8ed5-\
+c5086e36225e"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_1\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", 
+      "\[Rule]", "\<\"Sam 1's work stint is nearly complete.\"\>"}], ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "1059.25754`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"17m 39s\"\>"}], 
+     ",", 
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "0"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"0:0\"\>"}]}], "}"}], 
+   ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_2\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", "\[Rule]", "\<\"Sam 2's mission begins.\"\>"}], 
+     ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "654.50063`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"10m 55s\"\>"}], 
+     ",", 
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "1059.25754`"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"17:39\"\>"}]}], "}"}],
+    ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_3\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", 
+      "\[Rule]", "\<\"The threat of the other Sam.\"\>"}], ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "1395.11977`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"23m 15s\"\>"}], 
+     ",", 
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "1713.75817`"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"28:34\"\>"}]}], "}"}],
+    ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"A_4\"\>"}], ",", 
+     RowBox[{"\<\"title\"\>", 
+      "\[Rule]", "\<\"The Sam's join forces against a common threat.\"\>"}], 
+     ",", 
+     RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "2462.98895`"}], ",", 
+     RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"41m 3s\"\>"}], ",", 
+     RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "3108.8779400000003`"}], ",", 
+     RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"51:49\"\>"}]}], 
+    "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.736120180394656*^9, 3.7361202130852623`*^9, 
+  3.736120418017057*^9},ExpressionUUID->"7720138e-adf0-44d2-8c17-\
+6d99945c586e"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{
+  "\"\</Users/jamieinfinity/Projects/StoryTelling/Moon/movie_map/client/app/\
+film_data/acts.json\>\"", ",", "actDataFinal"}], "]"}]], "Input",
+ CellChangeTimes->{{3.736120240458187*^9, 
+  3.7361202666089983`*^9}},ExpressionUUID->"6d1ee6e3-664f-47ed-a18a-\
+b58fccc058aa"],
+
+Cell[BoxData["\<\"/Users/jamieinfinity/Projects/StoryTelling/Moon/movie_map/\
+client/app/film_data/acts.json\"\>"], "Output",
+ CellChangeTimes->{3.7361202671674356`*^9, 
+  3.736120421827136*^9},ExpressionUUID->"4f83dea7-c9cb-44e7-8724-\
+56369ff16992"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sceneData0", " ", "=", " ", 
+   RowBox[{"GatherBy", "[", 
+    RowBox[{"shots", ",", 
+     RowBox[{
+      RowBox[{"\"\<scene\>\"", "/.", "#"}], "&"}]}], "]"}]}], ";"}]], "Input",\
+
+ CellChangeTimes->{{3.736120464240971*^9, 
+  3.7361204704494257`*^9}},ExpressionUUID->"9a87f25c-c691-435c-a332-\
+befb4c759251"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sceneData1", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"\"\<id\>\"", "\[Rule]", 
+         RowBox[{"(", 
+          RowBox[{"\"\<scene\>\"", "/.", 
+           RowBox[{"#", "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], ")"}]}], ",", 
+        RowBox[{"\"\<title\>\"", "\[Rule]", 
+         RowBox[{"(", 
+          RowBox[{
+           RowBox[{"(", 
+            RowBox[{"\"\<scene\>\"", "/.", 
+             RowBox[{"#", "[", 
+              RowBox[{"[", "1", "]"}], "]"}]}], ")"}], "/.", "scenes"}], 
+          ")"}]}], ",", " ", 
+        RowBox[{"\"\<duration_seconds\>\"", "\[Rule]", 
+         RowBox[{"Total", "[", 
+          RowBox[{"\"\<duration\>\"", "/.", "#"}], "]"}]}], ",", 
+        RowBox[{"\"\<duration_formatted\>\"", "\[Rule]", 
+         RowBox[{"formatSeconds", "[", 
+          RowBox[{"Total", "[", 
+           RowBox[{"\"\<duration\>\"", "/.", "#"}], "]"}], "]"}]}]}], "}"}], 
+      ")"}], "&"}], "/@", "sceneData0"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.736120473077794*^9, 
+  3.736120544868456*^9}},ExpressionUUID->"73d76611-b7b3-434b-9b92-\
+4a6e41a8fe29"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sd1", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{"{", "0", "}"}], ",", 
+     RowBox[{"\"\<duration_seconds\>\"", "/.", 
+      RowBox[{"Most", "@", "sceneData1"}]}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.736120586246706*^9, 
+  3.736120595167923*^9}},ExpressionUUID->"a30f9fa8-90d6-449c-98b6-\
+a30f809d98de"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sd2", "=", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"\"\<start_seconds\>\"", "\[Rule]", "#"}], ",", 
+       RowBox[{"\"\<start_formatted\>\"", "\[Rule]", 
+        RowBox[{"formatSeconds2", "[", "#", "]"}]}]}], "}"}], "&"}], "/@", 
+    RowBox[{"Accumulate", "[", "sd1", "]"}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7361206033820763`*^9, 
+  3.736120612347088*^9}},ExpressionUUID->"dfb2d35a-d349-45c8-b2d0-\
+8bedd08ae1b4"],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"sceneDataFinal", "=", 
+   RowBox[{"Join", "@@@", 
+    RowBox[{"Transpose", "[", 
+     RowBox[{"{", 
+      RowBox[{"sceneData1", ",", "sd2"}], "}"}], "]"}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.736120623675736*^9, 
+  3.736120637974633*^9}},ExpressionUUID->"7bc09c3e-869c-4fa8-8d34-\
+a0ed8df7538d"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"sceneDataFinal", "[", 
+  RowBox[{"[", "2", "]"}], "]"}]], "Input",
+ CellChangeTimes->{{3.736120639275847*^9, 
+  3.736120667989913*^9}},ExpressionUUID->"057a42d7-8066-4a9b-aac5-\
+07cbd27eb8ee"],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"\<\"id\"\>", "\[Rule]", "\<\"SN_2\"\>"}], ",", 
+   RowBox[{"\<\"title\"\>", 
+    "\[Rule]", "\<\"Introduction to Sam 1 and the lunar base setting.\"\>"}], 
+   ",", 
+   RowBox[{"\<\"duration_seconds\"\>", "\[Rule]", "70.12505999999999`"}], ",", 
+   RowBox[{"\<\"duration_formatted\"\>", "\[Rule]", "\<\"1m 10s\"\>"}], ",", 
+   RowBox[{"\<\"start_seconds\"\>", "\[Rule]", "67.66456`"}], ",", 
+   RowBox[{"\<\"start_formatted\"\>", "\[Rule]", "\<\"01:08\"\>"}]}], 
+  "}"}]], "Output",
+ CellChangeTimes->{{3.736120648140697*^9, 3.7361206682791853`*^9}, 
+   3.736120791765957*^9, 
+   3.736120978800123*^9},ExpressionUUID->"037abd23-9cbb-479d-9d28-\
+cec0dddd89e4"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{
+  "\"\</Users/jamieinfinity/Projects/StoryTelling/Moon/movie_map/client/app/\
+film_data/scenes.json\>\"", ",", "sceneDataFinal"}], "]"}]], "Input",
+ CellChangeTimes->{{3.7361207221028547`*^9, 3.736120749812332*^9}, {
+  3.736120804322459*^9, 
+  3.736120828858141*^9}},ExpressionUUID->"16f33924-c7ca-4d6a-a38e-\
+208bc9640ad1"],
+
+Cell[BoxData["\<\"/Users/jamieinfinity/Projects/StoryTelling/Moon/movie_map/\
+client/app/film_data/scenes.json\"\>"], "Output",
+ CellChangeTimes->{{3.736120733930172*^9, 3.736120750342257*^9}, 
+   3.736120829963161*^9, 
+   3.736120979888129*^9},ExpressionUUID->"f8725daa-5fe1-4100-ac6a-\
+cee224757fcb"]
+}, Open  ]]
 }, Open  ]]
 }, Open  ]]
 },
-WindowSize->{1920, 1031},
+WindowSize->{2025, 1647},
 WindowMargins->{{0, Automatic}, {Automatic, 0}},
 FrontEndVersion->"11.2 for Mac OS X x86 (32-bit, 64-bit Kernel) (September \
 10, 2017)",
@@ -66978,12 +67451,51 @@ Cell[3993020, 66681, 252, 6, 34, "Output",ExpressionUUID->"c5dfd864-32ea-4456-9a
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[3993309, 66692, 403, 8, 30, "Input",ExpressionUUID->"c01ef4e7-12da-4902-a21b-7f7d56600d51"],
-Cell[3993715, 66702, 2003, 30, 77, "Output",ExpressionUUID->"be08479b-e6ea-4cd6-8433-b23bf1c1a2e4"]
+Cell[3993715, 66702, 2003, 30, 56, "Output",ExpressionUUID->"be08479b-e6ea-4cd6-8433-b23bf1c1a2e4"]
 }, Open  ]],
 Cell[CellGroupData[{
 Cell[3995755, 66737, 263, 7, 30, "Input",ExpressionUUID->"162f5989-f703-4084-b868-156cfe4a087f"],
 Cell[3996021, 66746, 132, 3, 34, "Output",ExpressionUUID->"3db1fc6b-8d6f-487c-8e02-14dc25a1ca42"]
 }, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[3996214, 66756, 173, 2, 67, "Section",ExpressionUUID->"e7b76621-7bad-43a3-9d30-0483b51592d3"],
+Cell[3996390, 66760, 2262, 59, 262, "Input",ExpressionUUID->"a3ecc7f2-5bd9-49a5-9935-3ea493fd88cc"],
+Cell[3998655, 66821, 1022, 29, 73, "Input",ExpressionUUID->"fafa4239-41ae-4e0a-9c83-1117dda3dab5"],
+Cell[3999680, 66852, 460, 11, 30, "Input",ExpressionUUID->"c1a7dfba-2f3e-44b1-805e-c7da88e339e2"],
+Cell[CellGroupData[{
+Cell[4000165, 66867, 1340, 33, 30, "Input",ExpressionUUID->"44847cac-34d4-4343-b86c-f030ad38bd32"],
+Cell[4001508, 66902, 1849, 41, 56, "Output",ExpressionUUID->"d519e759-0254-4114-bd49-7b09046ff955"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4003394, 66948, 343, 9, 30, "Input",ExpressionUUID->"5fae8ac7-f8d1-4bf0-b2b0-18916420d6a3"],
+Cell[4003740, 66959, 278, 6, 34, "Output",ExpressionUUID->"b9f50fae-970e-4f93-b0b4-39e3d80006c0"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4004055, 66970, 487, 12, 30, "Input",ExpressionUUID->"e646b2e9-d019-4ef7-9863-b2431ae13098"],
+Cell[4004545, 66984, 989, 26, 34, "Output",ExpressionUUID->"a93f74d4-0ac1-4e38-a53b-79d6d2c758e9"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4005571, 67015, 360, 9, 30, "Input",ExpressionUUID->"e6bf55b0-02cf-4436-8ed5-c5086e36225e"],
+Cell[4005934, 67026, 2258, 49, 98, "Output",ExpressionUUID->"7720138e-adf0-44d2-8c17-6d99945c586e"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4008229, 67080, 321, 7, 30, "Input",ExpressionUUID->"6d1ee6e3-664f-47ed-a18a-b58fccc058aa"],
+Cell[4008553, 67089, 251, 4, 34, "Output",ExpressionUUID->"4f83dea7-c9cb-44e7-8724-56369ff16992"]
+}, Open  ]],
+Cell[4008819, 67096, 342, 10, 30, "Input",ExpressionUUID->"9a87f25c-c691-435c-a332-befb4c759251"],
+Cell[4009164, 67108, 1173, 31, 30, "Input",ExpressionUUID->"73d76611-b7b3-434b-9b92-4a6e41a8fe29"],
+Cell[4010340, 67141, 367, 10, 30, "Input",ExpressionUUID->"a30f9fa8-90d6-449c-98b6-a30f809d98de"],
+Cell[4010710, 67153, 493, 13, 30, "Input",ExpressionUUID->"dfb2d35a-d349-45c8-b2d0-8bedd08ae1b4"],
+Cell[4011206, 67168, 337, 9, 30, "Input",ExpressionUUID->"7bc09c3e-869c-4fa8-8d34-a0ed8df7538d"],
+Cell[CellGroupData[{
+Cell[4011568, 67181, 216, 5, 30, "Input",ExpressionUUID->"057a42d7-8066-4a9b-aac5-07cbd27eb8ee"],
+Cell[4011787, 67188, 710, 15, 34, "Output",ExpressionUUID->"037abd23-9cbb-479d-9d28-cec0dddd89e4"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[4012534, 67208, 374, 8, 30, "Input",ExpressionUUID->"16f33924-c7ca-4d6a-a38e-208bc9640ad1"],
+Cell[4012911, 67218, 302, 5, 34, "Output",ExpressionUUID->"f8725daa-5fe1-4100-ac6a-cee224757fcb"]
 }, Open  ]]
 }, Open  ]]
 }, Open  ]]

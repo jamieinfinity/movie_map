@@ -1436,7 +1436,7 @@ function responseOf(parse, row) {
 
 dsv$1("text/csv", csvParse);
 
-var tsv$1 = dsv$1("text/tab-separated-values", tsvParse);
+dsv$1("text/tab-separated-values", tsvParse);
 
 const romanNums = {1: 'I', 2: 'II', 3: 'III', 4: 'IV', 5: 'V'};
 
@@ -1453,8 +1453,8 @@ function groupByScene(prev, cur) {
 function makeTabRowData(d, color) {
     return '<tr style="color:' + color + '" class="tr_data">' +
         '<td class="td_data"' + '><b>' + d.number + '</b></td>' +
-        '<td class="td_data"' + '>' + '0:00' + '</td>' +
-        '<td class="td_data" align="left"' + '>' + '20 mins' + '</td>' +
+        '<td class="td_data"' + '>' + d.startTime + '</td>' +
+        '<td class="td_data" align="right"' + '>' + d.duration + '</td>' +
         '<td class="td_data_button" align="center"' + '>' + '+' + '</td>' +
         '</tr>';
 }
@@ -1467,20 +1467,26 @@ function makeTabRowTitle(title, color) {
 
 function buildApp(domElementID) {
 
-    let actTitles = {}, actNumbers = {}, sceneTitles = {}, sceneNumbers = {}, tableData = [], groupedShots,
+    let actTitles = {}, actNumbers = {}, actStarts = {}, actDurations = {},
+        sceneTitles = {}, sceneNumbers = {}, sceneStarts = {}, sceneDurations = {},
+        tableData = [], groupedShots,
         numScenes, maxNumShots, prevAct, rowIndex;
 
-    tsv$1('./film_data/acts.tsv', function (error, dataActs) {
+    json('./film_data/acts.json', function (error, dataActs) {
         dataActs.forEach(function (d, i) {
-            actTitles[d.act] = d.title;
-            actNumbers[d.act] = romanNums[i + 1];
+            actTitles[d.id] = d.title;
+            actNumbers[d.id] = romanNums[i + 1];
+            actStarts[d.id] = d.startFormatted;
+            actDurations[d.id] = d.durationFormatted;
         });
         // numActs = Object.keys(actTitles).length;
 
-        tsv$1('./film_data/scenes.tsv', function (error, dataScenes) {
+        json('./film_data/scenes.json', function (error, dataScenes) {
             dataScenes.forEach(function (d, i) {
-                sceneTitles[d.scene] = d.title;
-                sceneNumbers[d.scene] = i + 1;
+                sceneTitles[d.id] = d.title;
+                sceneNumbers[d.id] = i + 1;
+                sceneStarts[d.id] = d.startFormatted;
+                sceneDurations[d.id] = d.durationFormatted;
             });
             numScenes = Object.keys(sceneTitles).length;
 
@@ -1517,12 +1523,16 @@ function buildApp(domElementID) {
                         shotCell["class"] = "act";
                         shotCell["title"] = actTitles[shotInfo.act];
                         shotCell["number"] = actNumbers[shotInfo.act];
+                        shotCell["startTime"] = actStarts[shotInfo.act];
+                        shotCell["duration"] = actDurations[shotInfo.act];
                         shotCell["row"] = rowIndex;
                         rowIndex += 1;
                     }
                     shotCell = {"class": "scene", "imageId": ""};
                     shotCell["title"] = sceneTitles[shotInfo.scene];
                     shotCell["number"] = sceneNumbers[shotInfo.scene];
+                    shotCell["startTime"] = sceneStarts[shotInfo.scene];
+                    shotCell["duration"] = sceneDurations[shotInfo.scene];
                     shotCell["row"] = rowIndex;
                     sceneRow.push(shotCell);
                     for (let j = 0; j < shots.length; j++) {
