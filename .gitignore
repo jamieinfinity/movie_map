@@ -20,6 +20,7 @@ pids
 _libs
 *_apptoken
 *.png
+!app_screen_shot.png
 
 # Coverage tools
 lib-cov
