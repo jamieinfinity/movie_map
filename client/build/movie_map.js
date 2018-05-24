@@ -1599,11 +1599,11 @@ function buildApp(domElementID) {
                         // having state info stored in html element, but it works :o
                         let sceneCell = table.selectAll("td.scene.row_" + sceneData.row),
                             rowState = sceneCell.select("td.td_data_button").text(),
-                            newState = (rowState === "+") ? "-" : "+",
+                            newState = (rowState === "+") ? "\u2013" : "+",
                             hCell = (rowState === "+") ? "200px" : "45px",
                             hImage = (rowState === "+") ? "90px" : "45px",
                             hDialog = (rowState === "+") ? "110px" : "0",
-                            w = (rowState === "+") ? "181px" : "90px",
+                            w = (rowState === "+") ? "182px" : "90px",
                             cs = (rowState === "+") ? "2" : "1",
                             im = (rowState === "+") ? "MED" : "SM",
                             p = (rowState === "+") ? "3px" : "0px";
@@ -1633,7 +1633,11 @@ function buildApp(domElementID) {
                             });
 
                         sceneCell.select("td.td_data_button").text(newState);
+
+                        sceneCell.select("table.table_data").style("height", "100%");
                     });
+
+                table.selectAll("table.table_data").style("height", "45px");
 
             });
 

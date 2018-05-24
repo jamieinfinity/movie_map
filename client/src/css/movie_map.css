@@ -1,6 +1,7 @@
 body {
-	background-color: #ddd;
-	color: #808080;
+	background-color: black;
+	/*background-color: #ddd;*/
+	/*color: #808080;*/
 	font-family: 'Avenir', 'Arial', sans-serif;
 	font-weight: 200;
 	font-size: 12px;
@@ -16,12 +17,13 @@ body {
 
 .movie_cell {
     padding: 0px;
+    /*border-radius: 4px;*/
 }
 .movie_cell.act {
-    background-color: #aaa;
+    background-color: #555;
 }
 .movie_cell.scene {
-    background-color: white;
+    background-color: #eee;
 }
 .movie_cell.shot {
     background-color: white;
@@ -32,9 +34,9 @@ div.shot_image {
 }
 
 div.shot_dialog {
-    background-color: #222;
+    background-color: #111;
     font-size: 7px;
-    color: white;
+    color: #fff;
 }
 
 table.table_data {
@@ -49,6 +51,7 @@ tr.tr_data {
 }
 
 tr.tr_title {
+    height: 100%;
     border-top: 1px solid #ccc;
 }
 
@@ -62,9 +65,14 @@ td.td_data {
 }
 
 td.td_data_button {
-    background-color: #999;
-    color: white;
+    background-color: #ddd;
+    color: #666;
     font-weight: bold;
     font-size: 10px;
     cursor: pointer;
+}
+
+.movie_cell.act td.td_data_button {
+    background-color: #444;
+    color: #aaa;
 }
