@@ -22,6 +22,9 @@ body {
 .movie_cell.act {
     background-color: #555;
 }
+.movie_cell.blank {
+    background-color: #222;
+}
 .movie_cell.scene {
     background-color: #eee;
 }
